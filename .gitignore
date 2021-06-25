@@ -6,6 +6,7 @@
 .pnp.js
 
 #deploy
+.firebase
 .firebaserc
 database.rules.json
 firebase.json
