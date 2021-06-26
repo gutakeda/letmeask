@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react'
+import { FormEvent, Fragment, useState } from 'react'
 import { useParams } from 'react-router'
 
 import logoImg from '../assets/images/logo.svg'
@@ -23,7 +23,6 @@ export function Room() {
     const roomId = params.id;
 
     const { title, questions } = useRoom(roomId);
-
 
     async function handleSendQuestion(event: FormEvent) {
         event.preventDefault();
@@ -96,7 +95,7 @@ export function Room() {
 
                 <div className="question-list">
                     {questions && questions.map(question => {
-                        return (
+                        return <Fragment key={question.id}>
                             <Question
                                 key={question.id}
                                 content={question.content}
@@ -118,7 +117,9 @@ export function Room() {
 
                                     </button>)}
                             </Question>
-                        )
+                            {question.answer &&
+                                <Question isAnswer content={question.answer.content} author={question.answer.author} />}
+                        </Fragment>
                     })}</div>
             </main>
         </div>
