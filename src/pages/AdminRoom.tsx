@@ -21,7 +21,7 @@ type RoomParams = {
 }
 
 export function AdminRoom() {
-    const { user } = useAuth();
+    const { user, signOutWithGoogle } = useAuth();
     const history = useHistory();
     const params = useParams<RoomParams>();
 
@@ -96,6 +96,7 @@ export function AdminRoom() {
                     <div>
                         <RoomCode code={roomId} />
                         <Button onClick={handleEndRoom} isOutlined>Encerrar sala</Button>
+                        <Button onClick={signOutWithGoogle} disabled={!user}>Deslogar</Button>
                     </div>
                 </div>
             </header>
