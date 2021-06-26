@@ -29,6 +29,8 @@ export function NewRoom() {
         const firebaseRoom = await roomRef.push({
             title: newRoom,
             authorId: user?.id,
+            authorName: user?.name,
+            avatar: user?.avatar
         })
 
         history.push(`/rooms/${firebaseRoom.key}`)
