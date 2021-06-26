@@ -10,8 +10,12 @@ import { database } from '../services/firebase'
 import { useAuth } from '../hooks/useAuth'
 
 import '../styles/auth.scss'
+import { useActive } from '../hooks/useActive'
 
 export function NewRoom() {
+    const { changeCurrent } = useActive();
+    changeCurrent('NewRoom');
+    
     const { user } = useAuth();
     const history = useHistory();
 
