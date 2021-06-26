@@ -17,13 +17,14 @@ function App() {
     <BrowserRouter>
       <AuthContextProvider >
         <NavContextProvider>
-          <NavigationBar/>
+          <NavigationBar />
           <Switch>
             <Route path="/" exact component={Home} />
             <Route path="/rooms/new" component={NewRoom} />
             <Route path="/rooms/:id" exact component={Room} />
             <Route path="/admin/rooms/:id" exact component={AdminRoom} />
             <Route path="/list" component={RoomList} />
+            <Route path="/myList" component={() => <RoomList filterByUser />} />
           </Switch>
         </NavContextProvider>
       </AuthContextProvider>

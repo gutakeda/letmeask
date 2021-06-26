@@ -10,14 +10,24 @@ import { useAuth } from '../hooks/useAuth'
 import '../styles/room.scss'
 import { useActive } from '../hooks/useActive'
 
+type RoomListType = {
+    filterByUser?: boolean
+}
 
-
-export function RoomList() {
+export function RoomList({ filterByUser = false }: RoomListType) {
     const { changeCurrent } = useActive();
-    changeCurrent('RoomList');
     const { user, signOutWithGoogle } = useAuth();
     const history = useHistory();
-    const { rooms } = useRoomList();
+    let { rooms } = useRoomList();
+
+    if (filterByUser) {
+        rooms = rooms.filter(room => room.authorId === user?.id)
+        changeCurrent('RoomListFiltered');
+    }
+    else {
+        changeCurrent('RoomList');
+    }
+
 
     async function handleJoinRoom(roomCode: string) {
         if (roomCode.trim() === '') {

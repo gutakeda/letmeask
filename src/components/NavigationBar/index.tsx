@@ -14,6 +14,7 @@ export function NavigationBar({ isHome = false, ...props }: NavigationBarType) {
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/rooms/new">Criar nova sala</Link></li>
                 <li><Link className={`${currentActive === "RoomList" ? 'active' : ''}`} to="/list">Lista de salas</Link></li>
+                <li><Link className={`${currentActive === "RoomListFiltered" ? 'active' : ''}`} to="/myList">Minhas salas</Link></li>
             </ul>
         </div>)
 }
