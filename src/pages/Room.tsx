@@ -16,7 +16,7 @@ type RoomParams = {
 }
 
 export function Room() {
-    const { user } = useAuth();
+    const { user, signOutWithGoogle } = useAuth();
     const params = useParams<RoomParams>();
     const [newQuestion, setNewQuestion] = useState('');
 
@@ -65,7 +65,10 @@ export function Room() {
             <header>
                 <div className="content">
                     <img src={logoImg} alt="Letmeask" />
-                    <RoomCode code={roomId} />
+                    <div>
+                        <RoomCode code={roomId} />
+                        <Button onClick={signOutWithGoogle} disabled={!user}>Deslogar</Button>
+                    </div>
                 </div>
             </header>
 

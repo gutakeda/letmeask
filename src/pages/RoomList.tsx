@@ -6,10 +6,13 @@ import { Button } from '../components/Button'
 import { RoomCode } from '../components/RoomCode'
 import { useRoomList } from '../hooks/useRoomList'
 import { database } from '../services/firebase'
+import { useAuth } from '../hooks/useAuth'
 import '../styles/room.scss'
 
 
+
 export function RoomList() {
+    const { user, signOutWithGoogle } = useAuth();
     const history = useHistory();
     const { rooms } = useRoomList();
 
@@ -39,6 +42,7 @@ export function RoomList() {
             <header>
                 <div className="content">
                     <img src={logoImg} alt="Letmeask" />
+                    <Button onClick={signOutWithGoogle} disabled={!user}>Deslogar</Button>
                 </div>
             </header>
 
