@@ -47,6 +47,10 @@ export function Home() {
 
     }
 
+    function handleSeeRoomList(event: FormEvent) {
+        history.push(`/list`);
+    }
+
     return (
         <div id="page-auth">
             <aside>
@@ -71,6 +75,9 @@ export function Home() {
                         />
                         <Button type="submit">
                             Entrar na sala
+                        </Button>
+                        <Button onClick={handleSeeRoomList}>
+                            Ver lista de salas
                         </Button>
                     </form>
                 </div>
