@@ -12,7 +12,15 @@ type QuestionType = {
     isAnswered: boolean,
     isHighlighted: boolean,
     likeCount: number,
-    likeId: string | undefined
+    likeId: string | undefined,
+    answer: {
+        //id: string,
+        content: string,
+        author: {
+            name: string,
+            avatar: string
+        }
+    }
 }
 
 type FirebaseQuestions = Record<string, {
@@ -26,6 +34,14 @@ type FirebaseQuestions = Record<string, {
     likes: Record<string, {
         authorId: string
     }>
+    answer: {
+        //id: string,
+        content: string,
+        author: {
+            name: string,
+            avatar: string
+        }
+    }
 }>
 
 export function useRoom(roomId: string) {
@@ -35,12 +51,13 @@ export function useRoom(roomId: string) {
 
     useEffect(() => {
         const roomRef = database.ref(`rooms/${roomId}`);
-        
+
         roomRef.on('value', room => {
             const databaseRoom = room.val();
             const firebaseQuestions: FirebaseQuestions = databaseRoom?.questions;
             if (firebaseQuestions) {
                 const parsedQuestions = Object.entries(firebaseQuestions).map(([key, value]) => {
+                    debugger;
                     return {
                         id: key,
                         content: value.content,
@@ -48,9 +65,11 @@ export function useRoom(roomId: string) {
                         isHighlighted: value.isHighlighted,
                         isAnswered: value.isAnswered,
                         likeCount: Object.values(value.likes ?? {}).length,
-                        likeId: Object.entries(value.likes ?? {}).find(([key, like]) => like.authorId === user?.id)?.[0]
+                        likeId: Object.entries(value.likes ?? {}).find(([key, like]) => like.authorId === user?.id)?.[0],
+                        answer: value.answer
                     }
                 })
+                debugger;
                 setQuestions(parsedQuestions);
             }
             setTitle(databaseRoom.title);

@@ -13,19 +13,23 @@ import { database } from '../services/firebase'
 import { useHistory } from 'react-router-dom'
 
 import '../styles/room.scss'
+import { FormEvent, Fragment, useState } from 'react'
+import { useAuth } from '../hooks/useAuth'
 
 type RoomParams = {
     id: string;
 }
 
 export function AdminRoom() {
-    // const { user } = useAuth();
+    const { user } = useAuth();
     const history = useHistory();
     const params = useParams<RoomParams>();
 
     const roomId = params.id;
 
     const { title, questions } = useRoom(roomId);
+    const [current, setCurrent] = useState<number>();
+    const [newQuestionAnswer, setNewQuestionAnswer] = useState('');
 
     async function handleEndRoom() {
         await database.ref(`rooms/${roomId}`).update({
@@ -40,16 +44,48 @@ export function AdminRoom() {
         }
     }
 
-    async function handleCheckQuestionAsAnswered(questionId: string) {
-        await database.ref(`rooms/${roomId}/questions/${questionId}`).update({
-            isAnswered: true
-        });
+    async function handleCheckQuestionAsAnswered(questionId: string, index: number) {
+        if (current !== index) {
+            setCurrent(index);
+        }
+        else setCurrent(-1)
     }
 
     async function handleHighlightQuestion(questionId: string) {
         await database.ref(`rooms/${roomId}/questions/${questionId}`).update({
             isHighlighted: true
         });
+    }
+
+    async function handleAnswerQuestion(questionId: string, event: FormEvent) {
+        event.preventDefault();
+
+        if (newQuestionAnswer.trim() === '') {
+            return;
+        }
+
+        if (!user) {
+            throw new Error('You must be logged in');
+        }
+
+        const answer = {
+            content: newQuestionAnswer,
+            author: {
+                name: user.name,
+                avatar: user.avatar
+            },
+        }
+
+        await database.ref(`rooms/${roomId}/questions/${questionId}`).update({
+            answer: answer
+        });
+
+        setNewQuestionAnswer('');
+
+        await database.ref(`rooms/${roomId}/questions/${questionId}`).update({
+            isAnswered: true
+        });
+        setCurrent(-1)
     }
 
     return (
@@ -71,37 +107,49 @@ export function AdminRoom() {
                 </div>
 
                 <div className="question-list">
-                    {questions && questions.map(question => {
+                    {questions && questions.map((question, index) => {
                         return (
-                            <Question
-                                key={question.id}
-                                content={question.content}
-                                author={question.author}
-                                isAnswered={question.isAnswered}
-                                isHighlighted={question.isHighlighted}
-                            >
-                                {!question.isAnswered && (
-                                    <>
-                                        <button
-                                            type="button"
-                                            onClick={() => handleCheckQuestionAsAnswered(question.id)}
-                                        >
-                                            <img src={checkImg} alt="Marcar pergunta como respondida" />
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => handleHighlightQuestion(question.id)}
-                                        >
-                                            <img src={answerImg} alt="Dar destaque à pergunta" />
-                                        </button>
-                                    </>)}
-                                <button
-                                    type="button"
-                                    onClick={() => handleDeleteQuestion(question.id)}
+                            <Fragment key={question.id} >
+                                <Question
+                                    key={question.id}
+                                    content={question.content}
+                                    author={question.author}
+                                    isAnswered={question.isAnswered}
+                                    isHighlighted={question.isHighlighted}
                                 >
-                                    <img src={deleteImg} alt="Remover pergunta" />
-                                </button>
-                            </Question>
+                                    {!question.isAnswered && (
+                                        <>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleCheckQuestionAsAnswered(question.id, index)}
+                                            >
+                                                <img src={checkImg} alt="Marcar pergunta como respondida" />
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleHighlightQuestion(question.id)}
+                                            >
+                                                <img src={answerImg} alt="Dar destaque à pergunta" />
+                                            </button>
+                                        </>)}
+                                    <button
+                                        type="button"
+                                        onClick={() => handleDeleteQuestion(question.id)}
+                                    >
+                                        <img src={deleteImg} alt="Remover pergunta" />
+                                    </button>
+                                </Question>
+                                <form onSubmit={(evt) => handleAnswerQuestion(question.id, evt)} hidden={current !== index}>
+                                    <textarea
+                                        placeholder="Resposta"
+                                        onChange={event => setNewQuestionAnswer(event.target.value)}
+                                        value={newQuestionAnswer}
+                                    />
+                                    <div className="form-footer">
+                                        <Button type="submit" disabled={!user}>Responder pergunta</Button>
+                                    </div>
+                                </form>
+                            </Fragment>
                         )
                     })}</div>
             </main>
