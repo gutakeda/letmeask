@@ -18,7 +18,6 @@ type FireBaseRooms = Record<string, {
 }>
 
 export function useRoomList() {
-    debugger;
     const { user } = useAuth();
     const [rooms, setRooms] = useState<RoomType[]>([]);
 
@@ -26,7 +25,6 @@ export function useRoomList() {
         let roomRef = database.ref('rooms');
         roomRef.on('value', room => {
             const databaseRoom: FireBaseRooms = room.val();
-            debugger;
             if (databaseRoom) {
                 const parsedRooms = Object.entries(databaseRoom).map(([key, value]) => {
                     return {
