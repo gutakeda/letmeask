@@ -8,10 +8,13 @@ import { useRoomList } from '../hooks/useRoomList'
 import { database } from '../services/firebase'
 import { useAuth } from '../hooks/useAuth'
 import '../styles/room.scss'
+import { useActive } from '../hooks/useActive'
 
 
 
 export function RoomList() {
+    const { changeCurrent } = useActive();
+    changeCurrent('RoomList');
     const { user, signOutWithGoogle } = useAuth();
     const history = useHistory();
     const { rooms } = useRoomList();
