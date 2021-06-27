@@ -19,6 +19,7 @@ This project was developed using the following technologies:
 - [React](https://reactjs.org)
 - [Firebase](https://firebase.google.com/)
 - [TypeScript](https://www.typescriptlang.org/)
+- [GitHub Actions](https://github.com/features/actions)
 
 ## ⚙️ How To Run 
 ```bash
