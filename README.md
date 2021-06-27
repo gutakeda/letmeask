@@ -42,13 +42,14 @@ $ yarn start
 - [X] Save data (using firebase)
 
 ## Addional features developed
-
+- [X] Integration with github action (deploy on commit on master and on PR merge)
 - [X] List all rooms page
 - [ ] List all rooms page filtered by by logged user
   - [ ] Using firebase API
   - [X] Using javascript filter
-- [X] Logout button 
+- [X] Admin can answer the questions
 - [X] Navigation bar component
+- [X] Logout button 
 - [X] Change theme to blue
 - [ ] Dark mode
 - [ ] Progressive web web
