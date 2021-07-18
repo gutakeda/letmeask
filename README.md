@@ -60,9 +60,6 @@ $ yarn start
 
 ## :computer: Demo:
 
-- [Letmeask - Demo](https://letmeask-2aaaa.web.app/)
-<h3 align="center">Home Page</h3>
-
 ![homepage](https://user-images.githubusercontent.com/45051556/123530132-83095a00-d6cd-11eb-8e4b-c5be64e47d27.png)
 <h1></h1>
 <h3 align="center">Admin Page</h3>
